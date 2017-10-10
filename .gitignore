@@ -1,0 +1,11 @@
+node_modules/*
+test*.js
+.env
+npm-debug.log
+uploads/*
+public/uploads/*
+public/devlogs/dev.log
+public/devlogs/dev
+public/devlogs/*
+logs/*
+.idea/*

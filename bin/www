@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+
+// Include the cluster module
+var cluster = require('cluster');
+require('dotenv').config();
+
+/* Set the Configuration */
+var SERVER_PORT = process.env.API_PORT;
+/*
+if (cluster.isMaster) {
+
+    // Count the machine's CPUs
+    var cpuCount = require('os').cpus().length;
+
+    // Create a worker for each CPU
+    for (var i = 0; i < cpuCount; i += 1) {
+        cluster.fork();
+    }
+
+    // Listen for dying workers
+	cluster.on('exit', function (worker) {
+
+	    // Replace the dead worker,
+	    // we're not sentimental
+	    cluster.fork();
+	});
+
+} else {
+*/
+	require('../dataservice/database').start(startServer);
+
+	function startServer() {
+
+		var debug = require('debug')('test');
+	 	var app = require('../app');
+
+	 	app.set('port', SERVER_PORT);
+
+	 	var server = app.listen(app.get('port'), function() {
+	   		/*
+	   		console.log('SERVER(' + cluster.worker.id + ') listening on port ' + server.address().port);
+			*/
+	   		console.log('SERVER listening on port ' + server.address().port);
+
+	   		require('../dataservice/notify').listen(server);
+	 	});
+	}
+	/*
+}
+*/
+	
